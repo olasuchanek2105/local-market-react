@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const listings = [
   {
     id: 1,
@@ -25,9 +27,18 @@ const listings = [
 
 function ListOfProducts(){
 
+    const [searchText, setSearchText] = useState("");
+
+    const filteredProducts = listings.filter((listing) => listing.title.toLowerCase().includes(searchText.toLowerCase()))
+    
     return(
         <div>
-            {listings.map((listings) => (
+            <input type="text" 
+            placeholder="Szukaj Produktu..."
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}/>
+            
+            {filteredProducts.map((listings) => (
                 <div key={listings.id}> 
                 <h2>{listings.title}</h2>
                 <p>{listings.price}</p>
@@ -35,6 +46,16 @@ function ListOfProducts(){
                 <p>{listings.category}</p>
                 </div>
             ))}
+
+
+            {/* {listings.map((listings) => (
+                <div key={listings.id}> 
+                <h2>{listings.title}</h2>
+                <p>{listings.price}</p>
+                <p>{listings.city}</p>
+                <p>{listings.category}</p>
+                </div>
+            ))} */}
         </div>
 
     )
