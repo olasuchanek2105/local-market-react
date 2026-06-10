@@ -133,9 +133,12 @@ const listings = [
 function ListOfProducts(){
 
     const [searchText, setSearchText] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedCity, setSelectedCity] = useState("")
 
     const categoryList = [...new Set(listings.map(listing => listing.category))];
+    const cityList = [...new Set(listings.map(listings => listings.city))];
+
 
     const filteredProducts = listings.filter((listing) => 
     {
@@ -146,7 +149,10 @@ function ListOfProducts(){
       const matchesCategory =
         selectedCategory === "" || listing.category === selectedCategory
 
-      return matchesCategory && matchesSearch
+      const matchesCity =
+        selectedCity === "" || listing.city === selectedCity
+
+      return matchesCategory && matchesSearch && matchesCity
     })
       
 
@@ -168,6 +174,18 @@ function ListOfProducts(){
               </option>
             ))}
             </select>
+
+            <select 
+              value={selectedCity} 
+              onChange={(event)=> setSelectedCity(event.target.value)}>
+
+              <option value="">Wszystkie kategorie</option>
+              {cityList.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+              </select>
             
             {filteredProducts.map((listings) => (
                 <div key={listings.id}> 
