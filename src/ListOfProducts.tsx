@@ -135,10 +135,11 @@ function ListOfProducts(){
     const [searchText, setSearchText] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedCity, setSelectedCity] = useState("")
+    const [selectedPriceRange, setSelectedPriceRange] = useState("")
 
     const categoryList = [...new Set(listings.map(listing => listing.category))];
     const cityList = [...new Set(listings.map(listings => listings.city))];
-
+    const pricesList = [100, 300, 1000]
 
     const filteredProducts = listings.filter((listing) => 
     {
@@ -152,7 +153,10 @@ function ListOfProducts(){
       const matchesCity =
         selectedCity === "" || listing.city === selectedCity
 
-      return matchesCategory && matchesSearch && matchesCity
+      const matchesPrices =
+        selectedPriceRange === "" || listing.price <= Number(selectedPriceRange)
+
+      return matchesCategory && matchesSearch && matchesCity && matchesPrices
     })
       
 
@@ -179,10 +183,23 @@ function ListOfProducts(){
               value={selectedCity} 
               onChange={(event)=> setSelectedCity(event.target.value)}>
 
-              <option value="">Wszystkie kategorie</option>
+              <option value="">Wszystkie miasta</option>
               {cityList.map((city) => (
                 <option key={city} value={city}>
                   {city}
+                </option>
+              ))}
+              </select>
+
+              
+            <select 
+              value={selectedPriceRange} 
+              onChange={(event)=> setSelectedPriceRange(event.target.value)}>
+
+              <option value="">Wszystkie ceny</option>
+              {pricesList.map((price) => (
+                <option key={price} value={price}>
+                  Poniżej {price}
                 </option>
               ))}
               </select>
