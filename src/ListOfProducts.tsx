@@ -28,15 +28,41 @@ const listings = [
 function ListOfProducts(){
 
     const [searchText, setSearchText] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("")
 
-    const filteredProducts = listings.filter((listing) => listing.title.toLowerCase().includes(searchText.toLowerCase()))
-    
+    const categoryList = [...new Set(listings.map(listing => listing.category))];
+
+    const filteredProducts = listings.filter((listing) => 
+    {
+      const matchesSearch = listing.title
+        .toLowerCase()
+        .includes(searchText.toLowerCase())
+
+      const matchesCategory =
+        selectedCategory === "" || listing.category === selectedCategory
+
+      return matchesCategory && matchesSearch
+    })
+      
+
+
     return(
         <div>
             <input type="text" 
             placeholder="Szukaj Produktu..."
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}/>
+
+            <select 
+            value={selectedCategory} 
+            onChange={(event) => setSelectedCategory(event.target.value)}>
+            <option value="">Wszystkie kategorie</option>
+            {categoryList.map((category)=>(
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+            </select>
             
             {filteredProducts.map((listings) => (
                 <div key={listings.id}> 
@@ -47,15 +73,6 @@ function ListOfProducts(){
                 </div>
             ))}
 
-
-            {/* {listings.map((listings) => (
-                <div key={listings.id}> 
-                <h2>{listings.title}</h2>
-                <p>{listings.price}</p>
-                <p>{listings.city}</p>
-                <p>{listings.category}</p>
-                </div>
-            ))} */}
         </div>
 
     )
