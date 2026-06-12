@@ -10,7 +10,7 @@ function ListOfProducts(){
     const [selectedPriceRange, setSelectedPriceRange] = useState("")
 
     const categoryList = [...new Set(listings.map(listing => listing.category))];
-    const cityList = [...new Set(listings.map(listings => listings.city))];
+    const cityList = [...new Set(listings.map(listing => listing.city))];
     const pricesList = [100, 300, 1000]
 
     const filteredProducts = listings.filter((listing) => 

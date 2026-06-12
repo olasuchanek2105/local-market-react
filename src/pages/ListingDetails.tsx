@@ -8,7 +8,7 @@ export function ListingDetails(){
     const listing = listings.find(listing => listing.id === Number(params.id))
 
     if (!listing){
-        return;
+        return null;
     } 
 
     return(
@@ -22,4 +22,3 @@ export function ListingDetails(){
     )
 }
 
-export default ListingDetails
