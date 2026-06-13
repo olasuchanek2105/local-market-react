@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListingCard from "../components/ListingCard";
-import { listings } from "../data/listings";
+// import { listings } from "../data/listings";
+import type { Listing } from "../data/listings";
 
 function ListOfProducts(){
 
+    const [listingsList, setListingsList] = useState<Listing[]>([])
     const [searchText, setSearchText] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedCity, setSelectedCity] = useState("")
     const [selectedPriceRange, setSelectedPriceRange] = useState("")
 
-    const categoryList = [...new Set(listings.map(listing => listing.category))];
-    const cityList = [...new Set(listings.map(listing => listing.city))];
+
+
+    useEffect(() => {
+
+        async function fetchListings() {
+          const response = await fetch('http://localhost:3000/listings');
+
+          if (!response.ok){
+            throw new Error("Nie udalo sie pobrac uzytkownikow");
+          }
+
+          const data = await response.json();
+
+          setListingsList(data)
+
+          
+        }
+        fetchListings()
+
+    }, [])
+
+    const categoryList = [...new Set(listingsList.map(listing => listing.category))];
+    const cityList = [...new Set(listingsList.map(listing => listing.city))];
     const pricesList = [100, 300, 1000]
 
-    const filteredProducts = listings.filter((listing) => 
+    const filteredProducts = listingsList.filter((listing) => 
     {
       const matchesSearch = listing.title
         .toLowerCase()
