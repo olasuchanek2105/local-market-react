@@ -4,6 +4,8 @@ const { z } = require('zod')
 const { PrismaClient } = require('@prisma/client');
 const { title } = require('node:process');
 const prisma = new PrismaClient()
+const authRouter = require('./auth')
+
 
 const app = express();
 const port = 3000;
@@ -19,6 +21,7 @@ const ListingSchema = z.object({
 
 app.use(cors());
 app.use(express.json())
+app.use('/auth', authRouter)
 
 app.get('/', (req, res) => {
     res.send("Hello World")

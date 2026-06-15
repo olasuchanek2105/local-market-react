@@ -15,13 +15,20 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+<<<<<<< HEAD
     "prisma": "^5.22.0",
     "zod": "^4.4.3"
+=======
+    "jsonwebtoken": "^9.0.3",
+    "prisma": "^5.22.0"
+>>>>>>> 9ffdfc5 (add user registration and login with JWT)
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "supertest": "^7.2.2",
     "vitest": "^4.1.9"
   }

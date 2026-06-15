@@ -14,3 +14,10 @@ model Listing {
   city     String
   category String
 }
+
+model User {
+id Int @id @default(autoincrement())
+email String @unique
+username String
+password String
+}
