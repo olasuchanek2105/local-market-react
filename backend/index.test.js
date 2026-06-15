@@ -61,4 +61,10 @@ describe('POST /listings/add', ()=>{
         .send(testListing)
         expect(response.status).toBe(201)
     })
+    it('powinno zwrocic 400 przy blednych danych', async() => {
+        const response = await request(app)
+        .post('/listings/add')
+        .send({ title: "Test", price: "nie liczba która nie przejdzie", city: 123, category: "" })
+        expect(response.status).toBe(400)
+    })
 })
