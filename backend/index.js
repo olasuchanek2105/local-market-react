@@ -1,10 +1,21 @@
 const express = require('express');
 const cors = require('cors')
+const { z } = require('zod')
 const { PrismaClient } = require('@prisma/client');
+const { title } = require('node:process');
 const prisma = new PrismaClient()
 
 const app = express();
 const port = 3000;
+
+// zod
+const ListingSchema = z.object({
+    title: z.string().min(1),
+    price: z.coerce.number(),
+    city: z.string().min(1),
+    category: z.string().min(1)
+})
+
 
 app.use(cors());
 app.use(express.json())
@@ -32,8 +43,16 @@ app.get('/listings/:id', async(req, res) => {
 
 app.post('/listings/add', async (req, res) => {
     const newListing = req.body;
+
+    const result = ListingSchema.safeParse(newListing)
+
+    if(!result.success){
+        return res.status(400).json({message: "Błędne dane wejściowe"})
+    }
+
     const created = await prisma.listing.create({data: newListing})
     res.status(201).json(created)
+
 })
 
 module.exports = app
