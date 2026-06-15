@@ -32,10 +32,8 @@ app.get('/listings/:id', async(req, res) => {
 
 app.post('/listings/add', async (req, res) => {
     const newListing = req.body;
-    await prisma.listing.create({data: newListing})
-    res.status(201).send("Udało się utworzyć ogłoszenie")
+    const created = await prisma.listing.create({data: newListing})
+    res.status(201).json(created)
 })
 
-app.listen(port, () => {
-console.log("Example app")
-})
+module.exports = app
