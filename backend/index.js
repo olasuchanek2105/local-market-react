@@ -5,7 +5,7 @@ const { PrismaClient } = require('@prisma/client');
 const { title } = require('node:process');
 const prisma = new PrismaClient()
 const authRouter = require('./auth')
-
+const authMiddleware = require('./middleware/auth')
 
 const app = express();
 const port = 3000;
@@ -44,7 +44,7 @@ app.get('/listings/:id', async(req, res) => {
         
 })
 
-app.post('/listings/add', async (req, res) => {
+app.post('/listings/add',authMiddleware, async (req, res) => {
     const newListing = req.body;
 
     const result = ListingSchema.safeParse(newListing)

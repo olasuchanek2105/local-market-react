@@ -5,6 +5,7 @@ import AddListing from "./pages/AddListing"
 import Navbar from "./components/Navbar"
 import AuthProvider from "./context/AuthContext"
 import Register from "./pages/Register"
+import Login from "./pages/Login"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/listings/add" element={<AddListing />} />
           <Route path="/listings/:id" element={<ListingDetails />} />
           <Route path="/auth/register" element={<Register/>} />
+          <Route path= "/auth/login" element={<Login/>}></Route>
         </Routes>
       </div>
     </AuthProvider>

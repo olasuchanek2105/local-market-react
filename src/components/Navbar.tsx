@@ -1,6 +1,9 @@
 import { Link } from "react-router"
+import { useAuth } from "../hooks/useAuth"
 
 function Navbar() {
+  const { user, token } = useAuth()
+
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -19,6 +22,12 @@ function Navbar() {
             className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
           >
             + Dodaj ogłoszenie
+          </Link>
+          <Link
+            to="/auth/register"
+            className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+          >
+            Zarejestruj się
           </Link>
         </div>
       </div>
