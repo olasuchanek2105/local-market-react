@@ -3,16 +3,28 @@ import { useState } from "react";
 function Register() {
     const [user, setUser] = useState({ email: "", username: "", password: "" })
     const [success, setSuccess] = useState(false)
-
+    const [emailTaken, setEmailTaken] = useState(false)
     async function handleSubmit(event: any) {
         event.preventDefault()
-        await fetch("http://localhost:3000/auth/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user)
-        })
-        setUser({ email: "", username: "", password: "" })
-        setSuccess(true)
+
+        try{
+
+            const response = await fetch("http://localhost:3000/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user)
+            })
+            if (!response.ok) {
+                throw new Error("Nie udało się zarejestrować")
+            } 
+            setUser({ email: "", username: "", password: "" })
+            setSuccess(true)
+            setEmailTaken(false)
+        }
+        catch(e){
+            setSuccess(false)
+            setEmailTaken(true)
+        }
     }
 
     const inputClass = "w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -71,6 +83,11 @@ function Register() {
                 {success && (
                     <div className="mt-4 bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
                         Konto zostało utworzone!
+                    </div>
+                )}
+                {emailTaken && (
+                    <div className="mt-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+                        Nie udało się zarejestrować! Istnieje konto na podany email.
                     </div>
                 )}
             </div>
