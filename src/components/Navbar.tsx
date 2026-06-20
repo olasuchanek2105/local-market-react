@@ -24,21 +24,34 @@ function Navbar() {
             + Dodaj ogłoszenie
           </Link>
 
-            {user ? <p>Zalogowano {user.username} 
-             <button onClick={logout}>Wyloguj</button>  </p>:
-            <p>
-              <Link
-                to="/auth/login"
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
-                >Zaloguj 
-              </Link>             
-              <Link
-                to="/auth/register"
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
-                >Zarejestruj 
-              </Link>
-            </p>
-            }
+            {user ? (
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-600">
+                  Witaj, <span className="font-medium text-gray-900">{user.username}</span>
+                </span>
+                <button
+                  onClick={logout}
+                  className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                >
+                  Wyloguj
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/auth/login"
+                  className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                >
+                  Zaloguj
+                </Link>
+                <Link
+                  to="/auth/register"
+                  className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                >
+                  Zarejestruj się
+                </Link>
+              </div>
+            )}
 
           
         </div>
