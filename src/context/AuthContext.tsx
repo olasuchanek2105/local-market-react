@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
 type AuthContextType = {
@@ -26,14 +26,31 @@ function AuthProvider({ children }: { children: ReactNode }){
     const [token, setToken] = useState<string | null>(null)
     const [user, setUser] = useState<userType| null>(null)
 
+    useEffect(()=> {
+        const localToken = localStorage.getItem('token')
+        const localUser = localStorage.getItem('user')
+        if (!localToken || !localUser){
+            return;
+        }
+        setToken(localToken)
+        setUser(JSON.parse(localUser))
+
+    },[])
+
     function login(newToken: string, newUser: userType ){
         setToken(newToken)
         setUser(newUser)
+        localStorage.setItem('token', newToken)
+        localStorage.setItem('user', JSON.stringify(newUser))
     }
 
     function logout() {
         setToken(null)
         setUser(null)
+
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+
     }
 
     return (
