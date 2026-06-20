@@ -1,14 +1,17 @@
 import { useState } from "react"
+import { useAuth } from "../hooks/useAuth"
 
 function AddListing() {
   const [listing, setListing] = useState({ title: "", price: 0, city: "", category: "" })
   const [success, setSuccess] = useState(false)
+  const {token} = useAuth()
 
   async function handleSubmit(event: any) {
     event.preventDefault()
     await fetch("http://localhost:3000/listings/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"},
       body: JSON.stringify(listing)
     })
     setListing({ title: "", price: 0, city: "", category: "" })
