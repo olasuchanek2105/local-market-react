@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors')
 const { z } = require('zod')
 const { PrismaClient } = require('@prisma/client');
-const { title } = require('node:process');
 const prisma = new PrismaClient()
 const authRouter = require('./auth')
 const authMiddleware = require('./middleware/auth')
@@ -53,7 +52,11 @@ app.post('/listings/add',authMiddleware, async (req, res) => {
         return res.status(400).json({message: "Błędne dane wejściowe"})
     }
 
-    const created = await prisma.listing.create({data: newListing})
+    const created = await prisma.listing.create({
+        data:{
+            ...newListing,
+            userId: req.user.id
+        }})
     res.status(201).json(created)
 
 })
