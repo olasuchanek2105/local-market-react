@@ -103,9 +103,19 @@ export function ListingDetails() {
             </div>
           </div>
             {user && listing.userId === user.id && (
-              <div>
-                  <Link to={`/listings/${params.id}/edit`}>Edytuj ogłoszenie</Link>
-                  <button onClick={handleDelete}>Usuń ogłoszenie</button>
+              <div className="flex gap-3 pt-2">
+                  <Link
+                    to={`/listings/${params.id}/edit`}
+                    className="flex-1 text-center border border-green-600 text-green-600 hover:bg-green-600 hover:text-white text-sm font-medium py-2 rounded-md transition-colors"
+                  >
+                    Edytuj ogłoszenie
+                  </Link>
+                  <button
+                    onClick={handleDelete}
+                    className="flex-1 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm font-medium py-2 rounded-md transition-colors"
+                  >
+                    Usuń ogłoszenie
+                  </button>
               </div>
 )}
         </div>
