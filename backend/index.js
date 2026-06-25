@@ -82,6 +82,42 @@ app.delete('/listings/:id',authMiddleware, async(req, res) =>{
 
 })
 
+app.put('/listings/:id',authMiddleware, async(req, res) =>{
+
+    try{
+        const changedListing = req.body;
+        const result = ListingSchema.safeParse(changedListing)
+
+        if(!result.success){
+            return res.status(400).json({message: "Błędne dane wejściowe"})
+        }
+
+        const params = req.params
+        const listing = await prisma.listing.findUnique({
+            where: {id: Number(params.id)}
+        })
+
+        if (!listing){
+            return res.status(404).json({message: "Nie znaleziono ogłoszenia"});
+        }
+        if (listing.userId !== req.user.id){
+            return res.status(403).json({message: "Brak dostępu"})
+        }
+        await prisma.listing.update({
+            where: {id: Number(params.id)},
+            data: {
+                ...changedListing
+            }
+        })
+        res.status(204).send()
+    }
+
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"})
+    }
+
+})
+
 app.post('/listings/add', authMiddleware, async (req, res) => {
 
 

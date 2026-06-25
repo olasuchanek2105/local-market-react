@@ -102,9 +102,12 @@ export function ListingDetails() {
               <span>{listing.category}</span>
             </div>
           </div>
-          {user && listing.userId === user.id && (
-              <button onClick={handleDelete}>Usuń ogłoszenie</button>
-          )}
+            {user && listing.userId === user.id && (
+              <div>
+                  <Link to={`/listings/${params.id}/edit`}>Edytuj ogłoszenie</Link>
+                  <button onClick={handleDelete}>Usuń ogłoszenie</button>
+              </div>
+)}
         </div>
       </div>
     </div>

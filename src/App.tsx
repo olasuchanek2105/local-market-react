@@ -7,6 +7,7 @@ import AuthProvider from "./context/AuthContext"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
+import EditListing from "./pages/EditListing"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/listings/:id" element={<ListingDetails />} />
           <Route path="/auth/register" element={<Register/>} />
           <Route path= "/auth/login" element={<Login/>}></Route>
+          <Route path="/listings/:id/edit" element={<ProtectedRoute><EditListing /></ProtectedRoute>} />
         </Routes>
       </div>
     </AuthProvider>
