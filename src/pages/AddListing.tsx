@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useAuth } from "../hooks/useAuth"
 
+
 function AddListing() {
   const [listing, setListing] = useState({ title: "", price: 0, city: "", category: "" })
   const [success, setSuccess] = useState(false)
@@ -8,14 +9,26 @@ function AddListing() {
 
   async function handleSubmit(event: any) {
     event.preventDefault()
-    await fetch("http://localhost:3000/listings/add", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"},
-      body: JSON.stringify(listing)
-    })
-    setListing({ title: "", price: 0, city: "", category: "" })
-    setSuccess(true)
+
+    try{
+    
+      const response = await fetch("http://localhost:3000/listings/add", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}`,
+                  "Content-Type": "application/json"},
+        body: JSON.stringify(listing)
+      })
+      if (!response.ok) {
+        throw new Error("Token nieaktywny")
+      }   
+      setListing({ title: "", price: 0, city: "", category: "" })
+      setSuccess(true)
+
+    }
+    catch(e){
+      setSuccess(false)
+    }
+
   }
 
   const inputClass = "w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"

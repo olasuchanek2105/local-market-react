@@ -7,11 +7,18 @@ const jwt = require('jsonwebtoken')
 
 
 router.post('/register', async (req, res) =>{
-    const user = req.body;
-    user.password = await bcrypt.hash(user.password, 10)
 
-    const created = await prisma.user.create({data: user})
-    res.status(201).json({id: created.id, email: created.email, username: created.username})
+    try{
+        const user = req.body;
+        user.password = await bcrypt.hash(user.password, 10)
+
+        const created = await prisma.user.create({data: user})
+        res.status(201).json({id: created.id, email: created.email, username: created.username})
+    }
+    catch(e){
+        return res.status(400).json({message: "Użytkownik o podanym emailu już istnieje"})
+    }
+
 })
 
 router.post('/login', async (req, res) =>{

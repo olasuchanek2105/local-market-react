@@ -2,9 +2,12 @@ const express = require('express');
 const cors = require('cors')
 const { z } = require('zod')
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient()
+
 const authRouter = require('./auth')
 const authMiddleware = require('./middleware/auth')
+
+
+const prisma = new PrismaClient({ log: ['query'] })
 
 const app = express();
 const port = 3000;
@@ -27,37 +30,59 @@ app.get('/', (req, res) => {
 });
 
 app.get('/listings', async (req, res) => {
-    res.json(await prisma.listing.findMany())
+
+    try{
+        const listings = await prisma.listing.findMany()
+        res.json(listings)
+    }
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"});
+    }
+
 })
 
 app.get('/listings/:id', async(req, res) => {
 
-    const params = req.params
-    const listing = await prisma.listing.findUnique({
-        where: {id: Number(params.id)}
-    })
-    if (!listing){
-        return res.status(404).json({message: "Nie znaleziono ogłoszenia"});
+    try{
+        const params = req.params
+        const listing = await prisma.listing.findUnique({
+            where: {id: Number(params.id)}
+        })
+        if (!listing){
+            return res.status(404).json({message: "Nie znaleziono ogłoszenia"});
+        }
+        res.status(200).json(listing)
+
     }
-    res.json(listing)
-        
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"})
+    }
+
 })
 
-app.post('/listings/add',authMiddleware, async (req, res) => {
-    const newListing = req.body;
+app.post('/listings/add', authMiddleware, async (req, res) => {
 
-    const result = ListingSchema.safeParse(newListing)
 
-    if(!result.success){
-        return res.status(400).json({message: "Błędne dane wejściowe"})
+    try{
+        const newListing = req.body;
+
+        const result = ListingSchema.safeParse(newListing)
+
+        if(!result.success){
+            return res.status(400).json({message: "Błędne dane wejściowe"})
+        }
+
+        const created = await prisma.listing.create({
+            data:{
+                ...newListing,
+                userId: req.user.id
+            }})
+        res.status(201).json(created)
+
     }
-
-    const created = await prisma.listing.create({
-        data:{
-            ...newListing,
-            userId: req.user.id
-        }})
-    res.status(201).json(created)
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"})
+    }
 
 })
 
