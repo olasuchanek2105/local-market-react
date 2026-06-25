@@ -1,13 +1,9 @@
 const express = require('express');
 const cors = require('cors')
 const { z } = require('zod')
-const { PrismaClient } = require('@prisma/client');
-
 const authRouter = require('./auth')
 const authMiddleware = require('./middleware/auth')
-
-
-const prisma = new PrismaClient({ log: ['query'] })
+const prisma = require('./lib/prisma.js')
 
 const app = express();
 const port = 3000;

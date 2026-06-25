@@ -17,10 +17,6 @@ function authMiddleware(req, res, next) {
     catch {
         return res.status(401).json({message: "Nieważny token"})
     }
-
-    // tu zweryfikuj token przez jwt.verify()
-    // jeśli błąd — zwróć 401
-    // jeśli ok — wywołaj next()
 }
 
 module.exports = authMiddleware
