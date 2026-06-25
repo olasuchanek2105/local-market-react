@@ -1,6 +1,7 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import type { Listing } from "../data/listings";
+import { useAuth } from "../hooks/useAuth";
 
 const categoryColors: Record<string, string> = {
   Elektronika: "bg-blue-100 text-blue-700",
@@ -12,6 +13,8 @@ export function ListingDetails() {
   const params = useParams();
   const [listing, setListing] = useState<Listing | null>(null)
   const [notFound, setNotFound] = useState(false)
+  const {user, token} = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchListing() {
@@ -29,6 +32,27 @@ export function ListingDetails() {
     }
     fetchListing()
   }, [params.id])
+
+  async function handleDelete(){
+
+    try{
+    
+      const response = await fetch(`http://localhost:3000/listings/${params.id}`, {
+          method: "DELETE",
+          headers: { "Authorization": `Bearer ${token}` }
+      })
+      if (!response.ok) {
+        throw new Error("Token nieaktywny")
+      }   
+
+      navigate('/listings')
+
+    }
+    catch(e){
+
+    }
+  
+  }
 
   if (notFound) {
     return (
@@ -78,6 +102,9 @@ export function ListingDetails() {
               <span>{listing.category}</span>
             </div>
           </div>
+          {user && listing.userId === user.id && (
+              <button onClick={handleDelete}>Usuń ogłoszenie</button>
+          )}
         </div>
       </div>
     </div>
