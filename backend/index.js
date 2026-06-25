@@ -3,7 +3,8 @@ const cors = require('cors')
 const { z } = require('zod')
 const authRouter = require('./auth')
 const authMiddleware = require('./middleware/auth')
-const prisma = require('./lib/prisma.js')
+const prisma = require('./lib/prisma.js');
+const { ppid } = require('node:process');
 
 const app = express();
 const port = 3000;
@@ -56,6 +57,31 @@ app.get('/listings/:id', async(req, res) => {
 
 })
 
+app.delete('/listings/:id',authMiddleware, async(req, res) =>{
+
+    try{
+        const params = req.params
+        const listing = await prisma.listing.findUnique({
+            where: {id: Number(params.id)}
+        })
+        if (!listing){
+            return res.status(404).json({message: "Nie znaleziono ogłoszenia"});
+        }
+        if (listing.userId !== req.user.id){
+            return res.status(403).json({message: "Brak dostępu"})
+        }
+        await prisma.listing.delete({
+            where: {id: Number(params.id)}
+        })
+        res.status(204).send()
+    }
+
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"})
+    }
+
+})
+
 app.post('/listings/add', authMiddleware, async (req, res) => {
 
 
@@ -81,5 +107,7 @@ app.post('/listings/add', authMiddleware, async (req, res) => {
     }
 
 })
+
+
 
 module.exports = app
