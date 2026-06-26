@@ -57,6 +57,25 @@ app.get('/listings/:id', async(req, res) => {
 
 })
 
+
+app.get('/user/me', authMiddleware , async(req, res) => {
+    try{
+        const user = await prisma.user.findUnique({
+            where: {id: req.user.id},
+            select: { id: true, email: true, username: true, listings: true }
+        })
+
+        if (!user){
+            return res.status(404).json({message: "Nie znaleziono użytkownika"});
+        }
+        res.status(200).json(user)
+    }
+    catch(e){
+        res.status(500).json({message: "Błąd serwera"})
+    }
+
+})
+
 app.delete('/listings/:id',authMiddleware, async(req, res) =>{
 
     try{
