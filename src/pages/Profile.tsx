@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth"
 
 type UserProfile = {
@@ -64,13 +65,13 @@ function Profile(){
                 ) : (
                     <div className="flex flex-col gap-3">
                         {userProfile.listings.map((listing) => (
-                            <div key={listing.id} className="flex justify-between items-center border border-gray-100 rounded-md px-4 py-3 text-sm">
+                            <Link key={listing.id} to={`/listings/${listing.id}`} className="flex justify-between items-center border border-gray-100 rounded-md px-4 py-3 text-sm hover:bg-gray-50 transition-colors">
                                 <div>
                                     <p className="font-medium text-gray-800">{listing.title}</p>
                                     <p className="text-gray-500">{listing.city} · {listing.category}</p>
                                 </div>
                                 <span className="font-bold text-green-600">{listing.price} zł</span>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 )}
