@@ -29,6 +29,12 @@ function Navbar() {
                 <span className="text-sm text-gray-600">
                   Witaj, <span className="font-medium text-gray-900">{user.username}</span>
                 </span>
+                <Link
+                  to="/profile"
+                  className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+                >
+                  Profil
+                </Link>
                 <button
                   onClick={logout}
                   className="text-gray-600 hover:text-gray-900 text-sm font-medium"

@@ -8,6 +8,7 @@ import Register from "./pages/Register"
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoute"
 import EditListing from "./pages/EditListing"
+import Profile from "./pages/Profile"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/auth/register" element={<Register/>} />
           <Route path= "/auth/login" element={<Login/>}></Route>
           <Route path="/listings/:id/edit" element={<ProtectedRoute><EditListing /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}></Route>
         </Routes>
       </div>
     </AuthProvider>
