@@ -3,6 +3,7 @@ const cors = require('cors')
 const { z } = require('zod')
 const authRouter = require('./auth')
 const authMiddleware = require('./middleware/auth')
+const upload = require('./middleware/upload')
 const prisma = require('./lib/prisma.js');
 const { ppid } = require('node:process');
 
@@ -137,7 +138,7 @@ app.put('/listings/:id',authMiddleware, async(req, res) =>{
 
 })
 
-app.post('/listings/add', authMiddleware, async (req, res) => {
+app.post('/listings/add', authMiddleware, upload.single('image'), async (req, res) => {
 
 
     try{
@@ -152,12 +153,15 @@ app.post('/listings/add', authMiddleware, async (req, res) => {
         const created = await prisma.listing.create({
             data:{
                 ...newListing,
-                userId: req.user.id
+                price: Number(newListing.price),
+                userId: req.user.id,
+                imageUrl: req.file ? req.file.path : null
             }})
         res.status(201).json(created)
 
     }
     catch(e){
+        console.error(e)
         res.status(500).json({message: "Błąd serwera"})
     }
 

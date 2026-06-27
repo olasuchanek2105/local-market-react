@@ -15,6 +15,7 @@ model Listing {
   category String
   userId   Int
   user User @relation(fields: [userId], references: [id])
+  imageUrl String?
 }
 
 model User {

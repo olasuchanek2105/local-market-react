@@ -5,30 +5,38 @@ import { useAuth } from "../hooks/useAuth"
 function AddListing() {
   const [listing, setListing] = useState({ title: "", price: 0, city: "", category: "" })
   const [success, setSuccess] = useState(false)
+  const [tokenNotValid, setTokenNotValid] = useState(false)
+  const [image, setImage] = useState<File | null>(null)
   const {token} = useAuth()
 
   async function handleSubmit(event: any) {
     event.preventDefault()
 
-    try{
+    try{  
+      const formData = new FormData()
+      formData.append('title', listing.title)
+      formData.append('price', String(listing.price))
+      formData.append('city', listing.city)
+      formData.append('category', listing.category)
+      if (image) formData.append('image', image)
     
       const response = await fetch("http://localhost:3000/listings/add", {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}`,
-                  "Content-Type": "application/json"},
-        body: JSON.stringify(listing)
+        headers: { "Authorization": `Bearer ${token}`},
+        body: formData
       })
       if (!response.ok) {
         throw new Error("Token nieaktywny")
       }   
       setListing({ title: "", price: 0, city: "", category: "" })
       setSuccess(true)
+      setTokenNotValid(false)
 
     }
     catch(e){
       setSuccess(false)
+      setTokenNotValid(true)
     }
-
   }
 
   const inputClass = "w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -40,6 +48,15 @@ function AddListing() {
 
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div>
+              <label className={labelClass}>Zdjęcie (opcjonalne)</label>
+              <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+                  className={inputClass}
+              />
+          </div>
           <div>
             <label className={labelClass}>Tytuł</label>
             <input
@@ -103,6 +120,11 @@ function AddListing() {
         {success && (
           <div className="mt-4 bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-4 py-3">
             Ogłoszenie zostało dodane!
+          </div>
+        )}
+        {tokenNotValid && (
+          <div className="mt-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+              Nie można dodać ogłoszenia, proszę się zalogować
           </div>
         )}
       </div>
