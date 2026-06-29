@@ -3,6 +3,7 @@ export type Listing = {
     title: string,
     price: number,
     city: string,
-    category: string
-    userId: number
+    category: string,
+    userId: number,
+    imageUrl: string | null,
 }

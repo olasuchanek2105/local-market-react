@@ -16,9 +16,13 @@ function ListingCard({ listing }: ListingCardProps) {
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow flex flex-col">
-      <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm">
-        Brak zdjęcia
-      </div>
+      {listing.imageUrl ? (
+          <img src={listing.imageUrl} alt={listing.title} className="h-40 w-full object-cover" />
+      ) : (
+          <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm">
+              Brak zdjęcia
+          </div>
+      )}
       <div className="p-4 flex flex-col gap-2 flex-1">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full w-fit ${colorClass}`}>
           {listing.category}

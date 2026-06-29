@@ -82,9 +82,13 @@ export function ListingDetails() {
       </Link>
 
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div className="bg-gray-100 h-64 flex items-center justify-center text-gray-400">
-          Brak zdjęcia
-        </div>
+        {listing.imageUrl ? (
+            <img src={listing.imageUrl} alt={listing.title} className="h-64 w-full object-cover" />
+        ) : (
+            <div className="bg-gray-100 h-40 flex items-center justify-center text-gray-400 text-sm">
+                Brak zdjęcia
+            </div>
+        )}
         <div className="p-6 flex flex-col gap-4">
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full w-fit ${colorClass}`}>
             {listing.category}
